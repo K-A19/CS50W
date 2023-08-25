@@ -1,0 +1,81 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+
+    {{ listing.title }}
+
+{% endblock %}
+
+{% block body %}
+
+    {% if listing.image %}
+    <table>
+        <tr>
+            <td>
+            <h1>{{ listing.title }}</h1>
+                
+                <img src="{{listing.image}}" alt="Image of {{listing.title}} ">
+                 
+            </td>
+            <td>
+                <p class="pricing">Current Price: ${{price}}</p>
+                <p>
+                    {% if message %}
+                    <div class="error">{{ message }}</div>
+                    {% endif %}
+                    <form action="{% url 'listing' listing.id %}"  method="post">
+                        {% csrf_token %}
+                        {% if bid_num > 1 %}
+                        {{ bid_num }} bids have already been made
+                        {% elif bid_num == 1 %}
+                        A bid has already been made
+                        {% else %}
+                        No bids have been made
+                        {% endif %}
+                        <br>
+                        ${{ form.bid }}
+                        <span><input type="submit" value="Submit" class="submit"></span>
+                    </form>
+                </p>
+                <h3>Details: </h3>
+                <p class="description">{{listing.description}}</p>
+                {% if listing.category %}
+                <p>Category: {{listing.category}}</p>
+                {% else %}
+                <p>Category: None specified</p>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    {% else %}
+
+        <h1>{{ listing.title }}</h1>
+        
+        <p class="pricing">Current Price: ${{price}}</p>
+        <p>
+            {% if message %}
+            <div class="error">{{ message }}</div>
+            {% endif %}
+            <form action="{% url 'listing' listing.id %}"  method="post">
+                {% csrf_token %}
+                {% if bid_num > 1 %}
+                {{ bid_num }} bids have already been made
+                {% elif bid_num == 1 %}
+                A bid has already been made
+                {% else %}
+                No bids have been made
+                {% endif %}
+                <br>
+                ${{ form.bid }}
+                <span><input type="submit" value="Submit" class="submit"></span>
+            </form>
+        </p>
+        <h3>Details: </h3>
+        <p class="description">{{listing.description}}</p>
+        {% if listing.category %}
+        <p>Category: {{listing.category}}</p>
+        {% else %}
+        <p>Category: None specified</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

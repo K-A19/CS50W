@@ -1,0 +1,87 @@
+body {
+    padding: 10px;
+}
+
+#new_listing table input, #new_listing table textarea {
+    width: 600px;
+    padding-left: 10px;
+    margin: 5px 11px ;
+}
+
+#new_listing textarea {
+    height: 150px;
+}
+
+#dollar_sign {
+    margin-left: -459pt;
+    margin-right: 300pt;
+ }
+
+ form table, form tr {
+    border: 0px;
+    width: 70%;
+    margin: 5px;
+    vertical-align: top;
+ }
+
+.submit {
+    width: 100px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: black;
+    margin-left: 38.3%;
+ }
+
+ .error, .extra {
+    font-weight: bold;
+    margin-top: 8px;
+ }
+
+.image {
+    width: 200px;
+    object-fit: contain;
+}
+
+td{
+    text-align: left;
+    vertical-align: center;
+    margin: 5px;
+    color: inherit ! important;
+}
+
+.pricing {
+    font-size: 18pt;
+    font-style: italic;
+}
+
+.description {
+    font-size: 12pt;
+}
+
+.card-header{
+    text-align: end;
+    height: min-content;
+    vertical-align: top;
+    font-size: 13px;
+    padding: 4px;
+    color: inherit ! important;
+}
+
+.card {
+    margin-top: 20px;
+}
+
+.normal_a, .normal_a:hover{
+    text-decoration: none;
+    color: inherit !important;
+}
+
+span .submit{
+    margin-left: 0;
+}
+
+img {
+    width: 300px;
+    object-fit: contain;
+    height: auto;
+}

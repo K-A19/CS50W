@@ -30,7 +30,8 @@ def index(request):
     return render(request, "auctions/index.html", {
         "listings" : listings,
         "bids" : bids,
-        "user" : request.user
+        "user" : request.user,
+        "watchlist": request.user.watchlist.all()
     })
 
 
@@ -130,9 +131,12 @@ def listing(request, id):
     # Gets the total number of bids currently made for the listing
     bid_num = len(bids)
 
-    user = request.user
-    if request.user == listing.owner:
-        user = 'owner'
+    # Determines if the current listing is in the current user's watchlist
+    if listing in request.user.watchlist.all():
+        watchlisted = True
+
+    else:
+        watchlisted = False
 
     if request.method == "POST":
 
@@ -160,4 +164,19 @@ def listing(request, id):
             if bid < listing.bid:
                 message = 'The proposed bid has to be greater than the minimum bid set by the owner'
 
-    return render(request, 'auctions/listing.html', {'listing': listing, 'price': price, 'user': request.user, 'form': NewBidForm(), 'bid_num': bid_num, 'message': message})
+    return render(request, 'auctions/listing.html', {'listing': listing, 'price': price, 'user': request.user, 'form': NewBidForm(), 'bid_num': bid_num, 'message': message, 'watchlisted': watchlisted})
+
+
+@login_required(login_url='login')
+def watching(request, id):
+    if request.method == 'POST':
+        listing = Listing.objects.get(id=id)
+        action = request.POST.get('Watchlist')
+
+        if action == 'Add To Watchlist':
+            listing.watchers.add(request.user)
+
+        elif action == 'Remove From Watchlist':
+            listing.watchers.remove(request.user)
+
+    return HttpResponseRedirect(reverse("listing", args=(id,)))

@@ -13,11 +13,24 @@
         <tr>
             <td>
             <h1>{{ listing.title }}</h1>
-                
-                <img src="{{listing.image}}" alt="Image of {{listing.title}} ">
+            {% if watchlisted %}
+                <div class="watched">Watchlisted</div>
+            {% endif %}
+            <img src="{{listing.image}}" alt="Image of {{listing.title}} ">
                  
             </td>
             <td>
+                {% if watchlisted %}
+                <form action="{% url 'watching' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="Watchlist" value="Remove From Watchlist" >
+                </form>
+                {% else %}
+                <form action="{% url 'watching' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="Watchlist" value="Add To Watchlist" >
+                </form>
+                {% endif %}
                 <p class="pricing">Current Price: ${{price}}</p>
                 <p>
                     {% if message %}
@@ -50,7 +63,20 @@
     {% else %}
 
         <h1>{{ listing.title }}</h1>
-        
+        {% if watchlisted %}
+            <div class="watched">Watchlisted</div>
+        {% endif %}
+            {% if watchlisted %}
+                <form action="{% url 'watching' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="Watchlist" value="Remove From Watchlist" >
+                </form>
+                {% else %}
+                <form action="{% url 'watching' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="Watchlist" value="Add To Watchlist" >
+                </form>
+            {% endif %}
         <p class="pricing">Current Price: ${{price}}</p>
         <p>
             {% if message %}

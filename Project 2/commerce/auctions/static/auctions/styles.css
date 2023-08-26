@@ -38,7 +38,7 @@ body {
  }
 
 .image {
-    width: 200px;
+    width: 250px;
     object-fit: contain;
 }
 
@@ -59,12 +59,23 @@ td{
 }
 
 .card-header{
-    text-align: end;
     height: min-content;
     vertical-align: top;
     font-size: 13px;
     padding: 4px;
     color: inherit ! important;
+    text-align: end;
+}
+
+.watched, .card-header .watched {
+    border-radius: 5px;
+    border: 1px black solid;
+    padding: 5px;
+    font-weight: bold;
+    background-color: rgb(117, 112, 112);
+    color: white;
+    margin-right: 7px;
+    width: fit-content;
 }
 
 .card {
@@ -84,4 +95,8 @@ img {
     width: 300px;
     object-fit: contain;
     height: auto;
+}
+
+.watched {
+    margin-bottom: 10px;
 }

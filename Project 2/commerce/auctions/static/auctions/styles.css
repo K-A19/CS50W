@@ -62,13 +62,12 @@ td{
 .card-header{
     height: fit-content;
     vertical-align: top;
-    font-size: 13px;
     padding: 8px 10px 8px 0px;
-    color: inherit ! important;
+    color: inherit !important;
     text-align: end;
 }
 
-.watched, .card-header .watched {
+.watched, .card-header .watched{
     border-radius: 5px;
     border: 1px black solid;
     padding: 5px;
@@ -77,6 +76,7 @@ td{
     color: white;
     margin-right: 7px;
     width: fit-content;
+    font-size: 13px;
 }
 
 .card {
@@ -101,4 +101,19 @@ img {
 .viewing {
     margin-left: auto;
     margin-right: auto;
+}
+
+.list-group {
+    margin: 20px;
+    width: 80%
+
+}
+
+.list-group input[type='text'] {
+    width: 80%;
+}
+
+.list-group input {
+    font-size: 15pt;
+    margin: 5px;
 }

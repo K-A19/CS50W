@@ -11,7 +11,7 @@
     {% if listing.image %}
     <table class="viewing">
         <tr>
-            <td>
+            <td class="image">
             <h1>{{ listing.title }}</h1>
             {% if watchlisted %}
                 <div class="watched">Watchlisted</div>
@@ -20,18 +20,19 @@
                  
             </td>
             <td>
-                {% if watchlisted %}
+                {% if watchlisted and listing.active %}
                 <form action="{% url 'watching' listing.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" name="Watchlist" value="Remove From Watchlist" >
                 </form>
-                {% else %}
+                {% elif listing.active %}
                 <form action="{% url 'watching' listing.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" name="Watchlist" value="Add To Watchlist" >
                 </form>
                 {% endif %}
                 <p class="pricing">Current Price: ${{price}}</p>
+                {% if listing.active %}
                 <p>
                     {% if message %}
                     <div class="error">{{ message }}</div>
@@ -50,6 +51,13 @@
                         <span><input type="submit" value="Submit" class="submit"></span>
                     </form>
                 </p>
+                {% else %}
+                    {% if listing.winner == user %}
+                    <p class="pricing">You won the auctions</p>
+                    {% else %}
+                    <p class="pricing">{{listing.winner}} won the auction</p>
+                    {% endif %}
+                {% endif %}
                 <h3>Details: </h3>
                 <p class="description">{{listing.description}}</p>
                 {% if listing.category %}
@@ -57,27 +65,36 @@
                 {% else %}
                 <p>Category: None specified</p>
                 {% endif %}
+                {% if listing.owner == user and listing.active %}
+                <form action="{% url 'close_listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="Close" value="Close Listing" class="btn btn-danger">
+                </form>
+                {% endif %}
             </td>
         </tr>
     </table>
     {% else %}
         <div class="viewing">
-        <h1>{{ listing.title }}</h1>
-        {% if watchlisted %}
-            <div class="watched">Watchlisted</div>
-        {% endif %}
+        <h1>
+            {{ listing.title }}
             {% if watchlisted %}
+                <span class="watched">Watchlisted</sapn>
+            {% endif %}
+        </h1>
+            {% if watchlisted and listing.active %}
                 <form action="{% url 'watching' listing.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" name="Watchlist" value="Remove From Watchlist" >
                 </form>
-                {% else %}
+                {% elif listing.active %}
                 <form action="{% url 'watching' listing.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" name="Watchlist" value="Add To Watchlist" >
                 </form>
             {% endif %}
         <p class="pricing">Current Price: ${{price}}</p>
+        {% if listing.active %}
         <p>
             {% if message %}
             <div class="error">{{ message }}</div>
@@ -96,6 +113,13 @@
                 <span><input type="submit" value="Submit" class="submit"></span>
             </form>
         </p>
+        {% else %}
+            {% if listing.winner == user %}
+            <p class="pricing">You won the auctions</p>
+            {% else %}
+            <p class="pricing">{{listing.winner}} won the auction</p>
+            {% endif %}
+        {% endif %}
         <h3>Details: </h3>
         <p class="description">{{listing.description}}</p>
         {% if listing.category %}
@@ -103,6 +127,43 @@
         {% else %}
         <p>Category: None specified</p>
         {% endif %}
+        {% if listing.owner == user and listing.active %}
+                <form action="{% url 'close_listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="Close" value="Close Listing" class="btn btn-danger">
+                </form>
+                {% endif %}
         </div>
     {% endif %}
+    
+    <ul class="list-group">
+        {% if listing.active %}
+        <li class="list-group-item">
+            <form action="{% url 'comment' listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Comment" name="content" maxlength="200">
+                <span><input type="submit" name="Submit" value="Make Comment"></span>
+            </form>
+        </li>
+        {% else %}
+        <li class="list-group-item">
+            <form action="{% url 'comment' listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Comment" name="content" maxlength="200" disabled>
+                <span><input type="submit" name="Submit" value="Make Comment" disabled></span>
+            </form>
+        </li>
+        {% endif %}
+        {% for comment in comments %}
+        <li class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h1> </h1>
+              <small>{{comment.time}}</small>
+            </div>
+            <p class="mb-1">{{ comment.content }}</p>
+            <small>Commented by {{ comment.owner }}</small>
+        </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

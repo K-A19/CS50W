@@ -24,8 +24,9 @@ def index(request):
 
     # Updates the current bid to the max bid that has been made
     for bid in bidings:
-        if bid.value > bids[bid.listing.title]:
-            bids[bid.listing.title] = bid.value
+        if bid.listing in listings:
+            if bid.value > bids[bid.listing.title]:
+                bids[bid.listing.title] = bid.value
 
     watchlist= None
     if request.user.is_authenticated:
@@ -141,6 +142,9 @@ def listing(request, id):
     else:
         watchlisted = False
 
+    # Gets all the comments for the listing
+    comments = Comment.objects.filter(listing=listing)
+
     if request.method == "POST":
 
         # Creates a new form instance and populates it with the submitted dataset
@@ -167,7 +171,7 @@ def listing(request, id):
             if bid < listing.bid:
                 message = 'The proposed bid has to be greater than the minimum bid set by the owner'
 
-    return render(request, 'auctions/listing.html', {'listing': listing, 'price': price, 'user': request.user, 'form': NewBidForm(), 'bid_num': bid_num, 'message': message, 'watchlisted': watchlisted})
+    return render(request, 'auctions/listing.html', {'listing': listing, 'price': price, 'user': request.user, 'form': NewBidForm(), 'bid_num': bid_num, 'message': message, 'watchlisted': watchlisted, 'comments': comments})
 
 
 @login_required(login_url='login')
@@ -190,4 +194,51 @@ def watching(request, id):
 
 @login_required(login_url='login')
 def close_listing(request, id):
-    pass
+    if request.method == 'POST':
+        # Gets the action to be performed and the listing on which it shall be performed on
+        listing = Listing.objects.get(id=id)
+        action = request.POST.get('Close')
+
+        # Ensures the action is actually to close the listing
+        if action == 'Close Listing':
+
+            # Sets the listing as now closed/inactive
+            listing.active = False
+
+            # Finds the user who made the maximum bid on the current listing
+            winner = Bid.objects.filter(listing=listing).order_by('-value')[0].owner
+
+            # Sets the user who had the maximum bid as the winner
+            listing.winner = winner
+
+            # Gets all the users which have the listing on their watchlist
+            users = listing.watchers
+
+            # Removes the listing from each user's watchlist
+            for user in users:
+                listing.watchers.remove(user)
+
+            # Saves the listing an dupdates its fields
+            listing.save()
+
+    # Redirects the user to the home page
+    return HttpResponseRedirect(reverse("index"))
+
+
+@login_required(login_url='login')
+def comment(request,id):
+    if request.method == 'POST':
+        
+        # Gets the listing and action to be performed as well as the content of the possible content
+        listing = Listing.objects.get(id=id)
+        action = request.POST.get('Submit')
+        content = request.POST.get('content')
+
+        # Make sure the right action s performed
+        if action == 'Make Comment':
+
+            # Makes a new comment object in the comment model
+            comment = Comment.objects.create(owner=request.user, listing=listing, content=content)
+
+    # Redirects the user to the original listing page they were on
+    return HttpResponseRedirect(reverse("listing", args=(id,)))

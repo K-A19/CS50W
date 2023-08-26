@@ -27,11 +27,15 @@ def index(request):
         if bid.value > bids[bid.listing.title]:
             bids[bid.listing.title] = bid.value
 
+    watchlist= None
+    if request.user.is_authenticated:
+        watchlist = request.user.watchlist.all()
+
     return render(request, "auctions/index.html", {
         "listings" : listings,
         "bids" : bids,
         "user" : request.user,
-        "watchlist": request.user.watchlist.all()
+        "watchlist": watchlist,
     })
 
 
@@ -134,7 +138,6 @@ def listing(request, id):
     # Determines if the current listing is in the current user's watchlist
     if listing in request.user.watchlist.all():
         watchlisted = True
-
     else:
         watchlisted = False
 
@@ -170,13 +173,21 @@ def listing(request, id):
 @login_required(login_url='login')
 def watching(request, id):
     if request.method == 'POST':
+        # Gets the action to be performed and the listing on which it shall be performed on
         listing = Listing.objects.get(id=id)
         action = request.POST.get('Watchlist')
 
+        # Adds the listing to the current user's watchlist
         if action == 'Add To Watchlist':
             listing.watchers.add(request.user)
 
+        # Removes the listing from the current user's watchlist
         elif action == 'Remove From Watchlist':
             listing.watchers.remove(request.user)
 
     return HttpResponseRedirect(reverse("listing", args=(id,)))
+
+
+@login_required(login_url='login')
+def close_listing(request, id):
+    pass

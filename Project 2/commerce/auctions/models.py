@@ -22,6 +22,7 @@ class Listing(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     watchers= models.ManyToManyField(User, blank=True, related_name='watchlist')
     active = models.BooleanField(default=True)
+    winner= models.ForeignKey(User, on_delete=models.CASCADE, related_name='won_listings', blank=True, default=None, null=True)
 
     def __str__(self):
         return f"{self.title}"

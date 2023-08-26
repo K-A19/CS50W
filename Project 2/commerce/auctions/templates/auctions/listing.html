@@ -9,7 +9,7 @@
 {% block body %}
 
     {% if listing.image %}
-    <table>
+    <table class="viewing">
         <tr>
             <td>
             <h1>{{ listing.title }}</h1>
@@ -61,7 +61,7 @@
         </tr>
     </table>
     {% else %}
-
+        <div class="viewing">
         <h1>{{ listing.title }}</h1>
         {% if watchlisted %}
             <div class="watched">Watchlisted</div>
@@ -103,5 +103,6 @@
         {% else %}
         <p>Category: None specified</p>
         {% endif %}
+        </div>
     {% endif %}
 {% endblock %}

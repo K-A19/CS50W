@@ -40,6 +40,7 @@ body {
 .image {
     width: 250px;
     object-fit: contain;
+    padding-right: 10px;
 }
 
 td{
@@ -59,10 +60,10 @@ td{
 }
 
 .card-header{
-    height: min-content;
+    height: fit-content;
     vertical-align: top;
     font-size: 13px;
-    padding: 4px;
+    padding: 8px 10px 8px 0px;
     color: inherit ! important;
     text-align: end;
 }
@@ -97,6 +98,7 @@ img {
     height: auto;
 }
 
-.watched {
-    margin-bottom: 10px;
+.viewing {
+    margin-left: auto;
+    margin-right: auto;
 }

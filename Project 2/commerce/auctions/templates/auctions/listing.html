@@ -54,6 +54,8 @@
                 {% else %}
                     {% if listing.winner == user %}
                     <p class="pricing">You won the auctions</p>
+                    {% elif listing.user == None %}
+                    <p class="pricing">No one won the auction. The owner decided to close it anyways</p>
                     {% else %}
                     <p class="pricing">{{listing.winner}} won the auction</p>
                     {% endif %}
@@ -116,6 +118,8 @@
         {% else %}
             {% if listing.winner == user %}
             <p class="pricing">You won the auctions</p>
+            {% elif listing.user == None %}
+            <p class="pricing">No one won the auction. The owner decided to close it anyways</p>
             {% else %}
             <p class="pricing">{{listing.winner}} won the auction</p>
             {% endif %}

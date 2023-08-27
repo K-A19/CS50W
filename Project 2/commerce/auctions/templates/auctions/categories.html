@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+
+Categories
+
+{% endblock %}
+
+{% block body %}
+
+{% if categories %}
+
+<ul>
+
+{% for category in categories %}
+
+<li>
+    <a href="{% url 'category' category %}">{{category}}</a>
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<h2>There are no categories right now</h2>
+
+{% endif %}
+
+{% endblock %}

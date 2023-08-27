@@ -1,0 +1,52 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+
+Watchlist
+
+{% endblock %}
+
+{% block body %}
+
+{% for listing in watchlist %}
+
+<a class="normal_a" href="{% url 'listing' listing.id %}">
+    <div class="card">
+        <div class="card-header">
+            <span class="watched">Watchlisted</span>
+            Posted {{ listing.time }} by {% if listing.owner.username == user.username %}Me ({{ user.username }}){% else %}{{listing.owner.username}}{% endif %}
+        </div>
+        <div class="card-body">
+        <table>
+            <tr>
+                <td class="image">
+                    {% if listing.image %}
+                    <img src="{{listing.image}}" alt="Image of {{listing.title}} " class="image">
+                    {% else %}
+                    <h4>Sorry, no available image</h4>
+                    {% endif %}
+                </td>
+                <td class="fit-con">
+                    <h1>{{listing.title}}</h1>
+
+                    {% for key, value in bids.items %}
+                        {% if key == listing.title %}
+                            <p class="pricing">Price: ${{ value }}</p>
+                        {% endif %}
+                    {% endfor %}
+
+                    <p class="description">{{listing.description}}</p>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</a>
+
+{% empty %}
+
+<h1>You have no items in your watchlist</h1>
+
+{% endfor %}
+
+{% endblock %}

@@ -205,14 +205,19 @@ def close_listing(request, id):
             # Sets the listing as now closed/inactive
             listing.active = False
 
-            # Finds the user who made the maximum bid on the current listing
-            winner = Bid.objects.filter(listing=listing).order_by('-value')[0].owner
+            try: 
+                # Finds the user who made the maximum bid on the current listing
+                winner = Bid.objects.filter(listing=listing).order_by('-value')[0].owner
 
-            # Sets the user who had the maximum bid as the winner
-            listing.winner = winner
+                # Sets the user who had the maximum bid as the winner
+                listing.winner = winner
 
+            except Exception:
+
+                winner = None
+            
             # Gets all the users which have the listing on their watchlist
-            users = listing.watchers
+            users = User.objects.filter(watchlist__in = [listing])
 
             # Removes the listing from each user's watchlist
             for user in users:
@@ -242,3 +247,83 @@ def comment(request,id):
 
     # Redirects the user to the original listing page they were on
     return HttpResponseRedirect(reverse("listing", args=(id,)))
+
+
+@login_required(login_url='login')
+def watchlist(request):
+
+    # Gets all the listings on the current user's watchlist
+    watchlist = request.user.watchlist.all()
+
+    # Gets all the currently made bids
+    bidings = Bid.objects.all()
+    bids = {}
+
+    # Sets the current price to the minimum bid set by the owner first
+    for listing in watchlist:
+        bids[listing.title] = listing.bid
+
+    # Updates the current bid to the max bid that has been made
+    for bid in bidings:
+        if bid.listing in watchlist:
+            if bid.value > bids[bid.listing.title]:
+                bids[bid.listing.title] = bid.value
+
+    return render(request, "auctions/watchlist.html", {
+        "bids" : bids,
+        "user" : request.user,
+        "watchlist": watchlist,
+    })
+
+
+def categories(request):
+    # Gets all the active listings which also have a category
+    active_categories = Listing.objects.filter(active=True).exclude(category='')
+
+    # Creates a list to store all the active categories
+    categories = []
+
+    # Populates a list of all active categories
+    for listing in active_categories:
+
+        # Checks if the current listing category already exists in the list of categories
+        if listing.category not in categories:
+
+            # Adds the listing to the list of listings in that category
+            categories.append(listing.category)
+
+    print(categories)
+
+    return render(request, "auctions/categories.html", {"categories" : categories})
+
+
+def category(request, category):
+
+    # Gets all of the active listings that are a part of this category
+    listings = Listing.objects.filter(active=True, category=category)
+
+    # Gets all the currently made bids
+    bidings = Bid.objects.all()
+    bids = {}
+
+    # Sets the current price to the minimum bid set by the owner first
+    for listing in listings:
+        bids[listing.title] = listing.bid
+
+    # Updates the current bid to the max bid that has been made
+    for bid in bidings:
+        if bid.listing in listings:
+            if bid.value > bids[bid.listing.title]:
+                bids[bid.listing.title] = bid.value
+
+    watchlist= None
+    if request.user.is_authenticated:
+        watchlist = request.user.watchlist.all()
+
+    return render(request, "auctions/category.html", {
+        "category":category, 
+        "listings":listings,
+        "bids" : bids,
+        "user" : request.user,
+        "watchlist": watchlist,
+        })

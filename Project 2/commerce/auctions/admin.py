@@ -9,7 +9,7 @@ admin.site.register(User, UserAdmin)
 
 # Registers the Listing model
 class ListingAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "description", "bid", "image", "category", "owner", "time", "active")
+    list_display = ("id", "title", "description", "bid", "image", "category", "owner", "time", "active","winner")
 
 admin.site.register(Listing, ListingAdmin)
 
@@ -17,10 +17,10 @@ admin.site.register(Listing, ListingAdmin)
 class BidAdmin(admin.ModelAdmin):
     list_display = ("id", "owner", "listing", "value", "time")
 
-admin.site.register(Bid)
+admin.site.register(Bid, BidAdmin)
 
 # Registers the Comment model
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("id", "owner", "listig", "content", "time")
+    list_display = ("id", "owner", "listing", "content", "time")
 
-admin.site.register(Comment)
+admin.site.register(Comment, CommentAdmin)

@@ -1,0 +1,28 @@
+textarea {
+    min-height: 400px;
+}
+
+label {
+    color: lightslategray;
+    font-size: 10px;
+}
+
+#message {
+    font-style: italic;
+    font-weight: bold;
+
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.list-group-item {
+    display: flex;
+     justify-content: space-between;
+}
+
+.no_list_style {
+    list-style-type: none;
+    padding-left: 0;
+}

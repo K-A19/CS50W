@@ -3,4 +3,17 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    followers = models.ManyToManyField('self', null=True, blank=True, related_name='follows')
+    following = models.ManyToManyField('self', null=True, blank=True, related_name='follower')
+
+
+class Post(models.Model):
+    id = models.AutoField(primary_key=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE ,related_name='posts')
+    content = models.CharField(max_length=500)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"Post by {self.owner} at {self.timestamp}"
+

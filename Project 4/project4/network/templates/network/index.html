@@ -1,5 +1,20 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    <h1 id="all_posts_header">All Posts</h1>
+
+    {% if user.is_authenticated %}
+        <div class="card card-body" id="new_post">
+            <p>New Post</p>
+            <form id="new_post_form" action="{% url 'new_post' %}" method="post">
+                {% csrf_token %}
+                {% if message %}
+                    <label class="message" for="new_post_content">{{message}}</label>
+                {%endif%}
+                <textarea id="new_post_content" name="content" placeholder="New Post" minlength="1"></textarea>
+                <br>
+                <input class="btn btn-dark" type="submit" value="Post">
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}

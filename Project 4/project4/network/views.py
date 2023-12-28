@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Post
 
 
 def index(request):
@@ -61,3 +62,19 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+@login_required(login_url='login')
+def new_post(request):
+    
+    if request.method == 'POST':
+         
+         # Gets information required to create a new post
+         content = request.POST.get('content')
+         user = request.user 
+         message = None
+         
+         post = Post.objects.create(owner=user, content=content)
+         post.save
+
+    return HttpResponseRedirect(reverse('index'))

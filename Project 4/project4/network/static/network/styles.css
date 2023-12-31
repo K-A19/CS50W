@@ -2,7 +2,11 @@
     font-family: Calibri, 'Trebuchet MS', sans-serif;
 }
 
-#new_post {
+.post_timestamp, .post_likes {
+    color: gray;
+}
+
+#new_post, .post {
     margin: 20px;
     margin-top: 30px;
 }

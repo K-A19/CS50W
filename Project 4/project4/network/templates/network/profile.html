@@ -1,0 +1,58 @@
+{% extends "network/layout.html" %}
+
+{% block title %}
+    {% if viewing %}
+        {{ viewing.username }}
+    {% else %}
+        ERROR
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    {% if message %}
+
+        <div class="user_nonexistent">{{ message }}</div>
+
+    {% else %}
+
+        <table id="user_info">
+            <tr>
+                <th rowspan="3"><h1 class="header" >{{ viewing.username }}</h1></th>
+                <th>Followers</th>
+                <th>Following</th>
+            </tr>
+            <tr>
+                <td>{{followers}}</td>
+                <td>{{following}}</td>
+            </tr>
+            {% if user != viewing and user.is_authenticated %}
+                <tr>
+                    <td colspan="2">
+                        <form action="{% url 'profile' viewing.id %}" method="post">
+                            {% csrf_token %}
+                            <input hidden type="text" name="User" value="{{ user.id }}" >
+                            {% if followed == None %}
+                                <input type="submit" name="Action" value="Follow">
+                            {% elif followed %}
+                                <input type="submit" name="Action" value="Unfollow">
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>    
+            {% endif %}
+        </table>
+
+        {% for post in posts %}
+            <div class="card post">
+                <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-body-secondary post_timestamp">{{ post.timestamp }}</h6>
+                <p class="card-text">{{ post.content }}</p>
+                <p class="card-text post_likes"><img src="../static/network/heart.png" alt="Empty Like Icon"> {{ post.likes }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% endif %}
+
+{% endblock %}

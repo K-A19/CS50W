@@ -26,7 +26,7 @@
     font-size: 28px;
 }
 
-#all_posts_header {
+.header {
     margin: 10px 20px 0px 20px;
     font-weight: bold;
 }
@@ -35,4 +35,36 @@
     font-style: italic;
     font-weight: bold;
     color: rgb(145, 146, 148);
+}
+
+a {
+    color: black;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+#user_info {
+    width: 50%;
+    text-align: center;
+}
+
+#user_info input {
+    width: 99%;
+    margin-top: 7px;
+    border-style: none;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+}
+
+#user_info th {
+    font-weight: bold;
+}
+
+input[type="submit"]:hover, #user_info input:hover {
+    border: 2px solid gray;
+    border-radius: 5px;
 }

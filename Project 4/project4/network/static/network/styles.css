@@ -42,8 +42,9 @@ a {
     font-weight: bold;
 }
 
-a:hover {
+.post a:hover {
     text-decoration: none;
+    color: darkslategrey;
 }
 
 #user_info {

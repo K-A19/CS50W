@@ -1,9 +1,9 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <h1 class="header">All Posts</h1>
+    <h1 class="header">{{title}}</h1>
 
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and title == "All Posts" %}
         <div class="card card-body" id="new_post">
             <p>New Post</p>
             <form id="new_post_form" action="{% url 'new_post' %}" method="post">

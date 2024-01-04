@@ -8,12 +8,25 @@ from django.urls import reverse
 from .models import User, Post
 
 
-def index(request):
+def index(request, following=None):
 
-    # Gets all the posts which have been made
-    posts = Post.objects.all().order_by('-timestamp')
+    if following == "following":
+
+        # Makes the title of the page following
+        title = "Following"
+
+        # Gets all posts which have been made by users which the user follow
+        posts= Post.objects.filter(owner__in=User.objects.filter(followers=request.user)).order_by('-timestamp')
+    else:
+
+        # Makes the title of the page all posts
+        title = "All Posts"
+
+        # Gets all the posts which have been made
+        posts = Post.objects.all().order_by('-timestamp')
 
     return render(request, "network/index.html", {
+        "title" : title,
         "posts" : posts,
     })
 

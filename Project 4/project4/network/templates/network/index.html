@@ -27,28 +27,36 @@
             <p class="card-text post_likes"><img src="../static/network/heart.png" alt="Empty Like Icon"> {{ post.likes }}</p>
             </div>
         </div>
-    {% endfor %}
 
-    <nav class="Page Control">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link link-dark" href="?page=1">&laquo; First</a></li>
-                <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-            {%else%}
-                <li class="page-item disabled"><a class="page-link" aria-disabled="true">&laquo; First</a></li>
-                <li class="page-item disabled"><a class="page-link" aria-disabled="true">Previous</a></li>
-            {% endif %}
-    
-            <li class="disabled page-item"><a class="link-dark page-link" aria-disabled="true">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
-    
-            {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
-            {%else%}
-                <li class="page-item disabled"><a class="page-link" aria-disabled="true">Next</a></li>
-                <li class="page-item disabled"><a class="page-link" aria-disabled="true">Last &raquo;</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+        {% if post == page_obj|last %}
+            <nav class="Page Control">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link link-dark" href="?page=1">&laquo; First</a></li>
+                        <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {%else%}
+                        <li class="page-item disabled"><a class="page-link" aria-disabled="true">&laquo; First</a></li>
+                        <li class="page-item disabled"><a class="page-link" aria-disabled="true">Previous</a></li>
+                    {% endif %}
+            
+                    <li class="disabled page-item"><a class="link-dark page-link" aria-disabled="true">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+            
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                        <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+                    {%else%}
+                        <li class="page-item disabled"><a class="page-link" aria-disabled="true">Next</a></li>
+                        <li class="page-item disabled"><a class="page-link" aria-disabled="true">Last &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {%endif%}
+    {%empty%}
+        {% if title == "All Posts "%}
+            <div class="center_message">There have been no posts made in Network as a whole</div>
+        {% else %}
+            <div class="center_message">From the people you follow there have been no posts made</div>
+        {%endif%}
+    {% endfor %}
 
 {% endblock %}

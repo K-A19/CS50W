@@ -69,3 +69,13 @@ input[type="submit"]:hover, #user_info input:hover {
     border: 2px solid gray;
     border-radius: 5px;
 }
+
+.center_message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
+    font-style: italic;
+    height: 80vh;
+}

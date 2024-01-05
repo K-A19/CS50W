@@ -151,6 +151,12 @@ def profile(request, id):
     # Gets all the posts the searched user is an author of
     posts = Post.objects.filter(owner = viewing)
 
+    # Implements pagination by 10 posts
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    print(page_obj)
+
     # If the current user already follows the viewed user, 1 is returned, otherwise None is returned
     followers_list = User.objects.filter(following=viewing)
     followed = 1 if request.user in followers_list else None
@@ -163,7 +169,7 @@ def profile(request, id):
     return render(request, "network/profile.html", {
         "viewing" : viewing,
         "message" : None,
-        "posts" : posts,
+        "page_obj" : page_obj,
         "followers" : followers,
         "following" : following,
         "followed" : followed,

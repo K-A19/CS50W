@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from .models import User, Post
 
@@ -25,9 +26,13 @@ def index(request, following=None):
         # Gets all the posts which have been made
         posts = Post.objects.all().order_by('-timestamp')
 
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/index.html", {
         "title" : title,
-        "posts" : posts,
+        "page_obj" : page_obj,
     })
 
 

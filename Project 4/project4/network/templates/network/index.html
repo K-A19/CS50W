@@ -21,10 +21,17 @@
     {% for post in page_obj %}
         <div class="card post">
             <div class="card-body">
-            <a href="{% url 'profile' post.owner.id %}"><h4 class="card-title">{{ post.owner }}</h4></a>
-            <h6 class="card-subtitle mb-2 text-body-secondary post_timestamp">{{ post.timestamp }}</h6>
-            <p class="card-text">{{ post.content }}</p>
-            <p class="card-text post_likes"><img src="../static/network/heart.png" alt="Empty Like Icon"> {{ post.likes }}</p>
+                <table class="post_header">
+                    <tr>
+                        <td><a href="{% url 'profile' post.owner.id %}"><h4 class="card-title">{{ post.owner }}</h4></a></td>
+                        {% if post.owner == user %}
+                            <td class="left-align"><button class="btn btn-dark edit" id="{{ post.id }}">Edit</button></td>
+                        {%endif%}
+                    </tr>
+                </table>
+                <h6 class="card-subtitle mb-2 text-body-secondary post_timestamp">{{ post.timestamp }}</h6>
+                <p class="card-text {{ post.id }}">{{ post.content }}</p>
+                <p class="card-text post_likes"><img src="../static/network/heart.png" alt="Empty Like Icon"> {{ post.likes }}</p>
             </div>
         </div>
 

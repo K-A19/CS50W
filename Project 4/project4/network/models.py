@@ -16,4 +16,9 @@ class Post(models.Model):
 
     def __str__(self) -> str:
         return f"Post by {self.owner} at {self.timestamp}"
+    
+    def serialize(self):
+        return {
+            "content" : self.content
+        }
 

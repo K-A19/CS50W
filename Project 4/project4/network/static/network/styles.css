@@ -79,3 +79,18 @@ input[type="submit"]:hover, #user_info input:hover {
     font-style: italic;
     height: 80vh;
 }
+
+.edit {
+    font-size: 11px;
+    height: max-content;
+    margin-top: 0;
+}
+
+.post_header {
+    width: 100%;
+    height: fit-content;
+}
+
+.left-align {
+    text-align: end;
+}

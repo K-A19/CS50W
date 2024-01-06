@@ -5,6 +5,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
 
 from .models import User, Post
 
@@ -174,3 +177,30 @@ def profile(request, id):
         "following" : following,
         "followed" : followed,
     })
+
+@csrf_exempt
+@login_required
+def post(request, post_id):
+
+    # Query for the requested post
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Email not found."}, status=404)
+    
+    # Return post contents
+    if request.method == "GET":
+        return JsonResponse(post.serialize())
+    
+    # Update whether email is read or should be archived
+    elif request.method == "PUT":
+        data = json.loads(request.body)
+        post.content = data["content"]
+        post.save()
+        return HttpResponse(status=204)
+
+    # Email must be via GET or PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
